@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <ru.yandex.yandexmapkit.MapView
+
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:apiKey="XJlvsTe-wvlc0NyF8vcUD6l5COJoJu1-PKSzeNv5c45LBTUsnNFDE9Q3684j1DkmYeQ~nAakqg4KZw1qyIEXoEWSBfS6uKFyMrzCa5rdQhs=">
+
+        </ru.yandex.yandexmapkit.MapView>
+
+    </RelativeLayout>
+
+
+</LinearLayout>
