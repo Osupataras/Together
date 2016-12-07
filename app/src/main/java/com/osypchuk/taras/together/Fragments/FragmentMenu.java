@@ -8,12 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.osypchuk.taras.together.Adapters.RoutesAdapter;
+import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
+import com.osypchuk.taras.together.Adapters.ExpRVAdapter;
 import com.osypchuk.taras.together.Api.ApiClient;
 import com.osypchuk.taras.together.Api.TogetherAPI;
+import com.osypchuk.taras.together.ExpRecycler.RoutesChild;
+import com.osypchuk.taras.together.ExpRecycler.RoutesParent;
 import com.osypchuk.taras.together.R;
 import com.osypchuk.taras.together.model.Route;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -28,6 +32,7 @@ public class FragmentMenu extends Fragment {
     public FragmentMenu() {
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -40,17 +45,47 @@ public class FragmentMenu extends Fragment {
 
                 RecyclerView recyclerView = (RecyclerView) getActivity().findViewById(R.id.rv);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
-                RoutesAdapter adapter = new RoutesAdapter(routes);
-                recyclerView.setAdapter(adapter);
+                List<RoutesParent> routesParentsList = new ArrayList<RoutesParent>();
+                List<ParentListItem> parentListItems = new ArrayList<>();
+
+                for (int i = 0; i < routes.size(); i++) {
+
+                    if (routes.get(i).getEndPoint() != null && routes.get(i).getStartPoint() != null) {
+                        RoutesParent routesParent = new RoutesParent(
+                                routes.get(i).getEndPoint().getAddress(),
+                                routes.get(i).getStartPoint().getAddress());
+                        routesParentsList.add(routesParent);
+
+                    } else {
+                        RoutesParent routesParent = new RoutesParent("null", "null");
+                        routesParentsList.add(routesParent);
+                    }
+
+                }
+
+                for (RoutesParent routesParent : routesParentsList) {
+                    List<RoutesChild> routesChildList = new ArrayList<>();
+                    routesChildList.add(new RoutesChild(
+                            routes.get(routesParentsList.indexOf(routesParent)).getId(),
+                            routes.get(routesParentsList.indexOf(routesParent)).getPrivate(),
+                            routes.get(routesParentsList.indexOf(routesParent)).getMaxPassengers(),
+                            routes.get(routesParentsList.indexOf(routesParent)).getOwner().getFirstName()
+                                    + routes.get(routesParentsList.indexOf(routesParent)).getOwner().getLastName(),
+                            routes.get(routesParentsList.indexOf(routesParent)).getPassengers(),
+                            routes.get(routesParentsList.indexOf(routesParent)).getRouteType(),
+                            routes.get(routesParentsList.indexOf(routesParent)).getStartDate()));
+                    recyclerView.setAdapter(new ExpRVAdapter(getContext(), parentListItems));
+                    routesParent.setRoute(routesChildList);
+                    parentListItems.add(routesParent);
+                }
             }
+
 
             @Override
             public void onFailure(Call<List<Route>> call, Throwable t) {
 
             }
         });
-
-
 
 
         return inflater.inflate(R.layout.fragment_menu, container, false);
