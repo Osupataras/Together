@@ -12,6 +12,7 @@ import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
 import com.osypchuk.taras.together.Adapters.ExpRVAdapter;
 import com.osypchuk.taras.together.Api.ApiClient;
 import com.osypchuk.taras.together.Api.TogetherAPI;
+import com.osypchuk.taras.together.ExpRecycler.ChildensGenerator;
 import com.osypchuk.taras.together.ExpRecycler.RoutesChild;
 import com.osypchuk.taras.together.ExpRecycler.RoutesParent;
 import com.osypchuk.taras.together.R;
@@ -64,16 +65,9 @@ public class FragmentMenu extends Fragment {
                 }
 
                 for (RoutesParent routesParent : routesParentsList) {
-                    List<RoutesChild> routesChildList = new ArrayList<>();
-                    routesChildList.add(new RoutesChild(
-                            routes.get(routesParentsList.indexOf(routesParent)).getId(),
-                            routes.get(routesParentsList.indexOf(routesParent)).getPrivate(),
-                            routes.get(routesParentsList.indexOf(routesParent)).getMaxPassengers(),
-                            routes.get(routesParentsList.indexOf(routesParent)).getOwner().getFirstName()
-                                    + routes.get(routesParentsList.indexOf(routesParent)).getOwner().getLastName(),
-                            routes.get(routesParentsList.indexOf(routesParent)).getPassengers(),
-                            routes.get(routesParentsList.indexOf(routesParent)).getRouteType(),
-                            routes.get(routesParentsList.indexOf(routesParent)).getStartDate()));
+                    ChildensGenerator childensGenerator = new ChildensGenerator();
+                    List<RoutesChild> routesChildList = childensGenerator.getChildrens(
+                            routes,routesParentsList,routesParent);
                     recyclerView.setAdapter(new ExpRVAdapter(getContext(), parentListItems));
                     routesParent.setRoute(routesChildList);
                     parentListItems.add(routesParent);

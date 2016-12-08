@@ -58,7 +58,7 @@ public class MapPoint {
         this.longitude = longitude;
     }
 
-    public MapPoint(String address, int id, double latitude, double longitude) {
+    public MapPoint(int id,double latitude,double longitude,String address) {
 
         this.address = address;
         this.id = id;
